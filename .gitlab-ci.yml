@@ -1,0 +1,34 @@
+variables:
+  APP : "expressjs-template-api"
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - deploy
+build-image-and-register-to-dockerhub-job:
+  variables:
+    DOCKER_IMAGE: "rhayeksa/$APP:latest"
+  image: docker:24.0.5
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+  services:
+    - docker:24.0.5-dind
+  before_script:
+    # - docker info
+    - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+  script:
+    - docker build -t $DOCKER_IMAGE .
+    - docker push $DOCKER_IMAGE
+
+# deploy-to-openshift-job:
+#   variables:
+#     OPENSHIFT_APP: "$APP:latest"  
+#   image: appuio/oc:v4.13
+#   stage: deploy
+#   rules:
+#     - if: $CI_COMMIT_BRANCH == 'main'
+#   before_script:
+#     - oc login --token=$OC_TOKEN --server=$OC_SERVER
+#   script:
+#     - oc import-image $OPENSHIFT_APP --from=$DOCKER_IMAGE --confirm
+#     # - oc autoscale dc/$APP --min 3 --max 10 --cpu-percent=80
+#     - oc scale --replicas=1 dc/$APP

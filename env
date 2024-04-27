@@ -1,0 +1,14 @@
+# ubah nama file ini jadi .env dan sesuaikan valuenya
+
+# Server
+PORT=?
+
+# Database
+DB_HOST=?
+DB_USERNAME=?
+DB_PASSWORD=?
+DB_NAME=?
+DB_DIALECT=?
+
+# Utils
+SECRET=?

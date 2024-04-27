@@ -1,0 +1,28 @@
+version: "3"
+services:
+  app:
+    container_name: expjs_template_api
+    build: .
+    ports:
+      - "3001:8000"
+    environment:
+      - PORT=8000
+      - DB_HOST=db
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+      - DB_NAME=db_template_api
+      - DB_DIALECT=mysql
+      - SECRET=rahasia
+    depends_on:
+      - db
+    # restart: always
+  db:
+    container_name: db_eta
+    image: mysql:8.3.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3300:3306"
+    volumes:
+      - ./databases/mysql:/docker-entrypoint-initdb.d
+    # restart: always
